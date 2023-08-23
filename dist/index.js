@@ -9816,8 +9816,9 @@ const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
 async function run() {
     var _a;
+    const core = __nccwpck_require__(2186);
     const token = (0, core_1.getInput)("gh-token");
-    const jsonfile = (0, core_1.getInput)("jsonfile");
+    const jsonfile = core.getInput("jsonfile");
     const octokit = (0, github_1.getOctokit)(token);
     const pullRequest = github_1.context.payload.pull_request;
     try {

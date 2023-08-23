@@ -2,8 +2,9 @@ import { getInput, setFailed } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 
 export async function run() {
+	const core = require("@actions/core");
 	const token = getInput("gh-token");
-	const jsonfile = getInput("jsonfile");
+	const jsonfile = core.getInput("jsonfile");
 
 	const octokit = getOctokit(token);
 	const pullRequest = context.payload.pull_request;
