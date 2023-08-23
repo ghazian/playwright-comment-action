@@ -37,10 +37,9 @@ export async function run() {
 		);
 
 		const bodyContent =
-			"<detail><summary>Playwright Test Report from Actions</summary>\n\n" +
-			JSON.stringify(jsonContent, null, 2) +
-			"</detail>"; // prefix with the identifier and then the formatted JSON content
-
+			"<detail><summary>Playwright Test Report from Actions</summary></detail>" +
+			"\n\n" +
+			JSON.stringify(jsonContent, null, 2); // prefix with the identifier and then the formatted JSON content
 		if (targetComment) {
 			// If the targeted comment exists, update it
 			await octokit.rest.issues.updateComment({
