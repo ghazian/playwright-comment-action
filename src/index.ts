@@ -15,12 +15,12 @@ export async function run() {
 			throw new Error("This action can only be run on Pull Requests");
 		}
 
-		const jsonContent = JSON.parse(fs.readFileSync(jsonfile, "utf8"));
+		// const jsonContent = JSON.parse(fs.readFileSync(jsonfile, "utf8"));
 
 		await octokit.rest.issues.createComment({
 			...context.repo,
 			issue_number: pullRequest.number,
-			body: jsonContent,
+			body: jsonfile,
 		});
 	} catch (error) {
 		setFailed((error as Error)?.message ?? "Unknown error");
