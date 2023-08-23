@@ -1,4 +1,4 @@
-name: "Label new pull requests"
+name: "Get a json file and post a comment"
 description: "Add a label when a new PR is opened"
 author: "Ghazian"
 
@@ -6,8 +6,8 @@ inputs:
   gh-token:
     description: "The Github token for authentication"
     required: true
-  prcomment:
-    description: "The prcomment of the pr comment"
+  jsonfile:
+    description: "File path for the json file"
     required: true
 
 runs:
