@@ -9817,7 +9817,7 @@ const github_1 = __nccwpck_require__(5438);
 async function run() {
     var _a;
     const token = (0, core_1.getInput)("gh-token");
-    const prComment = (0, core_1.getInput)("prcomment");
+    const jsonfile = (0, core_1.getInput)("jsonfile");
     const octokit = (0, github_1.getOctokit)(token);
     const pullRequest = github_1.context.payload.pull_request;
     try {
@@ -9827,7 +9827,7 @@ async function run() {
         await octokit.rest.issues.createComment({
             ...github_1.context.repo,
             issue_number: pullRequest.number,
-            body: prComment,
+            body: jsonfile,
         });
     }
     catch (error) {
