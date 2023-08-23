@@ -6,7 +6,9 @@ export async function run() {
 	const core = require("@actions/core");
 	const token = getInput("gh-token");
 	const jsonfile = core.getInput("jsonfile");
+	console.log("jsonFile: ", jsonfile);
 	const stringify = JSON.stringify(jsonfile);
+	console.log("stringify: ", stringify);
 
 	const octokit = getOctokit(token);
 	const pullRequest = context.payload.pull_request;
