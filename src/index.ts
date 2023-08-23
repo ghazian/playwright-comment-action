@@ -1,5 +1,6 @@
 import { getInput, setFailed } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
+import fs from "fs";
 
 export async function run() {
 	const core = require("@actions/core");
@@ -14,10 +15,12 @@ export async function run() {
 			throw new Error("This action can only be run on Pull Requests");
 		}
 
+		const jsonContent = JSON.parse(fs.readFileSync(jsonfile, "utf8"));
+
 		await octokit.rest.issues.createComment({
 			...context.repo,
 			issue_number: pullRequest.number,
-			body: jsonfile,
+			body: jsonContent,
 		});
 	} catch (error) {
 		setFailed((error as Error)?.message ?? "Unknown error");

@@ -1,6 +1,49 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 4822:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const core_1 = __nccwpck_require__(2186);
+const github_1 = __nccwpck_require__(5438);
+const fs_1 = __importDefault(__nccwpck_require__(7147));
+async function run() {
+    var _a;
+    const core = __nccwpck_require__(2186);
+    const token = (0, core_1.getInput)("gh-token");
+    const jsonfile = core.getInput("jsonfile");
+    const octokit = (0, github_1.getOctokit)(token);
+    const pullRequest = github_1.context.payload.pull_request;
+    try {
+        if (!pullRequest) {
+            throw new Error("This action can only be run on Pull Requests");
+        }
+        const jsonContent = JSON.parse(fs_1.default.readFileSync(jsonfile, "utf8"));
+        await octokit.rest.issues.createComment({
+            ...github_1.context.repo,
+            issue_number: pullRequest.number,
+            body: jsonContent,
+        });
+    }
+    catch (error) {
+        (0, core_1.setFailed)((_a = error === null || error === void 0 ? void 0 : error.message) !== null && _a !== void 0 ? _a : "Unknown error");
+    }
+}
+exports.run = run;
+if (!process.env.JEST_WORKER_ID) {
+    run();
+}
+
+
+/***/ }),
+
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -9804,44 +9847,12 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-var exports = __webpack_exports__;
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
-const core_1 = __nccwpck_require__(2186);
-const github_1 = __nccwpck_require__(5438);
-async function run() {
-    var _a;
-    const core = __nccwpck_require__(2186);
-    const token = (0, core_1.getInput)("gh-token");
-    const jsonfile = core.getInput("jsonfile");
-    const octokit = (0, github_1.getOctokit)(token);
-    const pullRequest = github_1.context.payload.pull_request;
-    try {
-        if (!pullRequest) {
-            throw new Error("This action can only be run on Pull Requests");
-        }
-        await octokit.rest.issues.createComment({
-            ...github_1.context.repo,
-            issue_number: pullRequest.number,
-            body: jsonfile,
-        });
-    }
-    catch (error) {
-        (0, core_1.setFailed)((_a = error === null || error === void 0 ? void 0 : error.message) !== null && _a !== void 0 ? _a : "Unknown error");
-    }
-}
-exports.run = run;
-if (!process.env.JEST_WORKER_ID) {
-    run();
-}
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(4822);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
