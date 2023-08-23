@@ -41,7 +41,7 @@ async function run() {
         });
         // Search for a comment that contains "Playwright Test Report from Actions"
         const targetComment = comments.data.find((comment) => { var _a; return (_a = comment === null || comment === void 0 ? void 0 : comment.body) === null || _a === void 0 ? void 0 : _a.includes("Playwright Test Report from Actions"); });
-        const bodyContent = "<detail><summary>Playwright Test Report from Actions</summary></detail>" +
+        const bodyContent = "<details><summary>Playwright Test Report from Actions</summary></details>" +
             "\n\n" +
             JSON.stringify(jsonContent, null, 2); // prefix with the identifier and then the formatted JSON content
         if (targetComment) {

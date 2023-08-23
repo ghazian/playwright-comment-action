@@ -37,7 +37,7 @@ export async function run() {
 		);
 
 		const bodyContent =
-			"<detail><summary>Playwright Test Report from Actions</summary></detail>" +
+			"<details><summary>Playwright Test Report from Actions</summary></details>" +
 			"\n\n" +
 			JSON.stringify(jsonContent, null, 2); // prefix with the identifier and then the formatted JSON content
 		if (targetComment) {
