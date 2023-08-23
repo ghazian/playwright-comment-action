@@ -25,11 +25,34 @@ export async function run() {
 			throw new Error("This action can only be run on Pull Requests");
 		}
 
-		await octokit.rest.issues.createComment({
+		// Fetch all comments of the PR
+		const comments = await octokit.rest.issues.listComments({
 			...context.repo,
 			issue_number: pullRequest.number,
-			body: JSON.stringify(jsonContent, null, 2), // format the JSON content with 2-space indentation for better readability
 		});
+
+		// Search for a comment posted by GitHub Actions bot (assuming the bot's login is "github-actions[bot]")
+		const botComment = comments.data.find(
+			(comment) => comment?.user?.login === "github-actions[bot]"
+		);
+
+		const bodyContent = JSON.stringify(jsonContent, null, 2); // formatted JSON content
+
+		if (botComment) {
+			// If the bot has already commented, update the comment
+			await octokit.rest.issues.updateComment({
+				...context.repo,
+				comment_id: botComment.id,
+				body: bodyContent,
+			});
+		} else {
+			// Otherwise, create a new comment
+			await octokit.rest.issues.createComment({
+				...context.repo,
+				issue_number: pullRequest.number,
+				body: bodyContent,
+			});
+		}
 	} catch (error) {
 		setFailed("Execution exit");
 	}
