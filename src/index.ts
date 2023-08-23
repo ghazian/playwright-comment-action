@@ -3,12 +3,19 @@ import { context, getOctokit } from "@actions/github";
 import fs from "fs";
 
 export async function run() {
-	const core = require("@actions/core");
 	const token = getInput("gh-token");
-	const jsonfile = core.getInput("jsonfile");
-	console.log("jsonFile: ", jsonfile);
-	const stringify = JSON.stringify(jsonfile);
-	console.log("stringify: ", stringify);
+	const jsonfilePath = getInput("jsonfile");
+	console.log("Path to JSON file: ", jsonfilePath);
+
+	let jsonContent;
+	try {
+		// Read and parse the content of the JSON file
+		jsonContent = JSON.parse(fs.readFileSync(jsonfilePath, "utf8"));
+		console.log("JSON content:", jsonContent);
+	} catch (error) {
+		setFailed(`Error reading JSON file at ${jsonfilePath}: ${error}`);
+		return;
+	}
 
 	const octokit = getOctokit(token);
 	const pullRequest = context.payload.pull_request;
@@ -18,15 +25,13 @@ export async function run() {
 			throw new Error("This action can only be run on Pull Requests");
 		}
 
-		// const jsonContent = JSON.parse(fs.readFileSync(jsonfile, "utf8"));
-
 		await octokit.rest.issues.createComment({
 			...context.repo,
 			issue_number: pullRequest.number,
-			body: stringify,
+			body: JSON.stringify(jsonContent, null, 2), // format the JSON content with 2-space indentation for better readability
 		});
 	} catch (error) {
-		setFailed((error as Error)?.message ?? "Unknown error");
+		setFailed("Execution exit");
 	}
 }
 
