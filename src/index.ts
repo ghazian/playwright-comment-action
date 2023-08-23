@@ -31,18 +31,20 @@ export async function run() {
 			issue_number: pullRequest.number,
 		});
 
-		// Search for a comment posted by GitHub Actions bot (assuming the bot's login is "github-actions[bot]")
-		const botComment = comments.data.find(
-			(comment) => comment?.user?.login === "github-actions[bot]"
+		// Search for a comment that contains "Playwright Test Report from Actions"
+		const targetComment = comments.data.find((comment) =>
+			comment?.body?.includes("Playwright Test Report from Actions")
 		);
 
-		const bodyContent = JSON.stringify(jsonContent, null, 2); // formatted JSON content
+		const bodyContent =
+			"Playwright Test Report from Actions\n\n" +
+			JSON.stringify(jsonContent, null, 2); // prefix with the identifier and then the formatted JSON content
 
-		if (botComment) {
-			// If the bot has already commented, update the comment
+		if (targetComment) {
+			// If the targeted comment exists, update it
 			await octokit.rest.issues.updateComment({
 				...context.repo,
-				comment_id: botComment.id,
+				comment_id: targetComment.id,
 				body: bodyContent,
 			});
 		} else {
