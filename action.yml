@@ -6,8 +6,8 @@ inputs:
   gh-token:
     description: "The Github token for authentication"
     required: true
-  label:
-    description: "The label to be applied to the pull requests"
+  prcomment:
+    description: "The prcomment of the pr comment"
     required: true
 
 runs:

@@ -3,7 +3,7 @@ import { context, getOctokit } from "@actions/github";
 
 export async function run() {
 	const token = getInput("gh-token");
-	const label = getInput("label");
+	const prComment = getInput("prcomment");
 
 	const octokit = getOctokit(token);
 	const pullRequest = context.payload.pull_request;
@@ -13,11 +13,10 @@ export async function run() {
 			throw new Error("This action can only be run on Pull Requests");
 		}
 
-		await octokit.rest.issues.addLabels({
-			owner: context.repo.owner,
-			repo: context.repo.repo,
+		await octokit.rest.issues.createComment({
+			...context.repo,
 			issue_number: pullRequest.number,
-			labels: [label],
+			body: prComment,
 		});
 	} catch (error) {
 		setFailed((error as Error)?.message ?? "Unknown error");

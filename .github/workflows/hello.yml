@@ -11,4 +11,4 @@ jobs:
       - uses: ./
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
-          label: "needs-review"
+          prcomment: "Hello, this is the first step for the first PR"
