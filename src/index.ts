@@ -6,6 +6,7 @@ export async function run() {
 	const core = require("@actions/core");
 	const token = getInput("gh-token");
 	const jsonfile = core.getInput("jsonfile");
+	const stringify = JSON.stringify(jsonfile);
 
 	const octokit = getOctokit(token);
 	const pullRequest = context.payload.pull_request;
@@ -20,7 +21,7 @@ export async function run() {
 		await octokit.rest.issues.createComment({
 			...context.repo,
 			issue_number: pullRequest.number,
-			body: jsonfile,
+			body: stringify,
 		});
 	} catch (error) {
 		setFailed((error as Error)?.message ?? "Unknown error");
