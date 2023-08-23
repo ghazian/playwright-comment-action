@@ -15,25 +15,33 @@ const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 async function run() {
-    var _a;
-    const core = __nccwpck_require__(2186);
     const token = (0, core_1.getInput)("gh-token");
-    const jsonfile = core.getInput("jsonfile");
+    const jsonfilePath = (0, core_1.getInput)("jsonfile");
+    console.log("Path to JSON file: ", jsonfilePath);
+    let jsonContent;
+    try {
+        // Read and parse the content of the JSON file
+        jsonContent = JSON.parse(fs_1.default.readFileSync(jsonfilePath, "utf8"));
+        console.log("JSON content:", jsonContent);
+    }
+    catch (error) {
+        (0, core_1.setFailed)(`Error reading JSON file at ${jsonfilePath}: ${error}`);
+        return;
+    }
     const octokit = (0, github_1.getOctokit)(token);
     const pullRequest = github_1.context.payload.pull_request;
     try {
         if (!pullRequest) {
             throw new Error("This action can only be run on Pull Requests");
         }
-        const jsonContent = JSON.parse(fs_1.default.readFileSync(jsonfile, "utf8"));
         await octokit.rest.issues.createComment({
             ...github_1.context.repo,
             issue_number: pullRequest.number,
-            body: jsonContent,
+            body: JSON.stringify(jsonContent, null, 2), // format the JSON content with 2-space indentation for better readability
         });
     }
     catch (error) {
-        (0, core_1.setFailed)((_a = error === null || error === void 0 ? void 0 : error.message) !== null && _a !== void 0 ? _a : "Unknown error");
+        (0, core_1.setFailed)("Execution exit");
     }
 }
 exports.run = run;
