@@ -11,4 +11,4 @@ jobs:
       - uses: ./
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
-          jsonfile: ./reports/report.json
+          jsonfile: reports/report.json
